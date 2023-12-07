@@ -1,0 +1,60 @@
+config network denga
+#su admin
+#4
+Network configuration
+
+quit
+
+Edit Netplan
+
+#Generate By Ambedded
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    eno1:
+      dhcp4: false
+      dhcp6: false
+    eno2:
+      dhcp4: false
+      dhcp6: false
+    enP1p1s0f0:
+      dhcp4: false
+      dhcp6: false
+    enP1p1s0f1:
+      dhcp4: false
+      dhcp6: false
+  bonds:
+    bond0:
+      dhcp4: false
+      dhcp6: false
+      mtu: 1500
+      parameters:
+        mode: 802.3ad
+        lacp-rate: fast
+        mii-monitor-interval: 100
+      interfaces:
+        - enP1p1s0f0
+        - enP1p1s0f1
+  vlans:
+    bond-lan:
+      id: 900
+      link: bond0
+      mtu: 1500
+      addresses: [10.100.90.1/24]
+      gateway4: 10.100.90.254
+      nameservers:
+        addresses: [38.47.79.137, 38.47.79.10]
+    bond-cluster:
+      id: 901
+      link: bond0
+      mtu: 1500
+      addresses: [10.100.91.1/24]
+    bond-mgmt:
+      id: 723
+      link: bond0
+      mtu: 1500
+      addresses: [10.100.13.1/24]
+      routes:
+      - to: 10.100.13.0/24
+        via: 10.100.13.254
